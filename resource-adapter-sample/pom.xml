@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>uk.me.mattgill.samples</groupId>
-    <artifactId>samples-master</artifactId>
+    <artifactId>resource-adapter-sample</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
 
-    <name>Sample Suite</name>
+    <name>Sample Suite - Resource Adapter Sample</name>
+    <packaging>pom</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -16,19 +16,17 @@
     </properties>
 
     <modules>
-    	<module>cdi-ear-sample</module>
-    	<module>cdi-event-sample</module>
-        <module>config-api-sample</module>
-        <module>resource-adapter-sample</module>
-        <module>connector-sample</module>
-    	<module>cluster-ping</module>
-        <module>grizzly-sample</module>
-        <module>jaxrs-hello-world</module>
-        <module>jpa-sample</module>
-    	<module>jsf-cdi-sample</module>
-        <module>logging-sample</module>
-        <module>mongodb-sample</module>
-        <module>vaadin-sample</module>
+        <module>resource-adapter-api</module>
+        <module>resource-adapter-rar</module>
     </modules>
     
+    <dependencies>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>8.0</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
 </project>

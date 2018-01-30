@@ -24,9 +24,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>fish.payara.cloud.connectors.mqtt</groupId>
-            <artifactId>mqtt-jca-api</artifactId>
-            <version>0.1.0</version>
+            <groupId>uk.me.mattgill.samples</groupId>
+            <artifactId>resource-adapter-api</artifactId>
+            <version>1.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -40,7 +40,7 @@
             <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <configuration>
-                    <artifact>fish.payara.cloud.connectors.mqtt:mqtt-rar:0.2.0:rar</artifact>
+                    <artifact>uk.me.mattgill.samples:resource-adapter-rar:1.0-SNAPSHOT:rar</artifact>
                     <outputDirectory>${project.build.directory}</outputDirectory>
                 </configuration>
                 <executions>

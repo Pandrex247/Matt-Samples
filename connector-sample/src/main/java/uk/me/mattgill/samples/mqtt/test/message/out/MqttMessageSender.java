@@ -10,36 +10,32 @@ import javax.ejb.Stateless;
 import javax.resource.ConnectionFactoryDefinition;
 import javax.resource.spi.TransactionSupport;
 
-import fish.payara.cloud.connectors.mqtt.api.MQTTConnection;
-import fish.payara.cloud.connectors.mqtt.api.MQTTConnectionFactory;
-import uk.me.mattgill.samples.mqtt.test.message.in.MqttMessageDrivenBean;
+import uk.me.mattgill.samples.resource.adapter.api.SampleConnectionFactory;
+import uk.me.mattgill.samples.resource.adapter.api.SampleConnection;
 
-@ConnectionFactoryDefinition(name = "java:module/env/MQTTConnectionFactory",
-        description = "MQTT Connection Factory",
-        interfaceName = "fish.payara.cloud.connectors.mqtt.api.MQTTConnectionFactory",
-        resourceAdapter = "mqtt-rar-0.2.0",
-        minPoolSize = 2,
-        maxPoolSize = 2,
-        transactionSupport = TransactionSupport.TransactionSupportLevel.NoTransaction,
-        properties = {
-            "serverURIs=tcp://test.mosquitto.org:1883",
-            "cleanSession=true"
-        })
+@ConnectionFactoryDefinition(name = "java:app/env/MyConnectionFactory",
+        description = "My Connection Factory",
+        interfaceName = "uk.me.mattgill.samples.resource.adapter.api.SampleConnectionFactory",
+        resourceAdapter = "resource-adapter-rar-1.0-SNAPSHOT",
+        minPoolSize = 1,
+        maxPoolSize = 10,
+        transactionSupport = TransactionSupport.TransactionSupportLevel.NoTransaction
+)
 @Stateless
 public class MqttMessageSender {
 
-    @Resource(lookup = "java:module/env/MQTTConnectionFactory")
-    private MQTTConnectionFactory factory;
+    @Resource(lookup = "java:app/env/MyConnectionFactory")
+    private SampleConnectionFactory factory;
 
-    private Logger logger = Logger.getLogger(MqttMessageDrivenBean.class.getName());
+    private Logger logger = Logger.getLogger(MqttMessageSender.class.getName());
 
     @Schedule(hour = "*", minute = "*", second = "*/5", persistent = false)
     public void fireEvent() {
         
         String message = UUID.randomUUID().toString();
         
-        try (MQTTConnection conn = factory.getConnection()) {
-            conn.publish("fish/payara/cloud/test/mosquitto", message.getBytes(), 1, false);
+        try (SampleConnection conn = factory.getConnection()) {
+            conn.publish("fish/payara/cloud/test/mosquitto", message, 1);
         } catch (Exception ex) {
             logger.log(Level.WARNING, "Error sending message: {0}", ex.getMessage());
         }
