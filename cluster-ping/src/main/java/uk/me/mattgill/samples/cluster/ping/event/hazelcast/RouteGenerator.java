@@ -1,6 +1,5 @@
 package uk.me.mattgill.samples.cluster.ping.event.hazelcast;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -10,7 +9,9 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.Member;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @ApplicationScoped
 public class RouteGenerator {
@@ -39,6 +40,13 @@ public class RouteGenerator {
 
         // Always send to the local instance at the end
         route.add(localInstanceName);
+
+        try {
+            Thread.sleep(ThreadLocalRandom.current().nextInt(0, 1001));
+        } catch (InterruptedException ex) {
+            Logger.getLogger(RouteGenerator.class.getName()).log(Level.SEVERE,
+                    "Interrupted whilst mocking a long running process", ex);
+        }
 
         return route;
     }

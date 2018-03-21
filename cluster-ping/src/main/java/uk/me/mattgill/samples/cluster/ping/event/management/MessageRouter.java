@@ -14,6 +14,9 @@ import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Inject;
 
 import fish.payara.micro.cdi.Outbound;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import uk.me.mattgill.samples.cluster.ping.event.entity.TrackerMessage;
 
 @ApplicationScoped
@@ -35,6 +38,13 @@ public class MessageRouter {
     }
 
     private void send(TrackerMessage message, String instance) {
+        try {
+            Thread.sleep(ThreadLocalRandom.current().nextInt(0, 3001));
+        } catch (InterruptedException ex) {
+            Logger.getLogger(MessageRouter.class.getName()).log(Level.SEVERE,
+                    "Interrupted whilst mocking a long running process", ex);
+        }
+
         event.select(new OutboundLiteral(instance)).fire(message);
     }
 
@@ -56,7 +66,7 @@ public class MessageRouter {
         private String[] instanceName;
 
         public OutboundLiteral(String instanceName) {
-            this.instanceName = new String[] { instanceName };
+            this.instanceName = new String[]{instanceName};
         }
 
         @Override

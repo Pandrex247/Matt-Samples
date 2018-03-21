@@ -1,8 +1,11 @@
 package uk.me.mattgill.samples.cluster.ping.service.resource;
 
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -39,6 +42,12 @@ public class TrackerResource {
     @Produces(MediaType.TEXT_PLAIN)
     public String helloWorld(@QueryParam("message") String messageText) {
         if (messageText == null || messageText.isEmpty()) {
+            try {
+                Thread.sleep(ThreadLocalRandom.current().nextInt(0, 3001));
+            } catch (InterruptedException ex) {
+                Logger.getLogger(TrackerResource.class.getName()).log(Level.SEVERE, 
+                        "Interrupted whilst mocking a long running process", ex);
+            }
             messageText = "Hello World!";
         }
         TrackerMessage message = new TrackerMessage(messageText, routeGenerator.getRoute());
